@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1565727446153.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "0|32|24|0|\n",
+    "hash" : "1394577569",
+    "id" : "E0F1B931",
+    "lastKnownWriteTime" : 1565775609,
+    "last_content_update" : 1565775609711,
+    "path" : "~/functions.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "41,60",
+        "scrollLine" : "0",
+        "tempName" : "Untitled2"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

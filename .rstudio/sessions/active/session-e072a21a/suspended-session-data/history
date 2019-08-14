@@ -1,0 +1,512 @@
+plot_data %>%
+filter(amount <= 500) %>%
+ggplot() +
+geom_segment(aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount),
+lineend = "round") +
+geom_text_repel(aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+scale_x_date(date_minor_breaks = "1 day") +
+labs(y = "Flight Price", x = "") +
+theme_minimal()
+plot_data %>%
+filter(amount <= 500) %>%
+ggplot() +
+geom_segment(aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+geom_point(aes(x = as.Date(time_out),
+y = amount)) +
+geom_text_repel(aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+scale_x_date(date_minor_breaks = "1 day") +
+labs(y = "Flight Price", x = "") +
+theme_minimal()
+plot_data %>%
+filter(amount <= 500) %>%
+ggplot() +
+geom_segment(aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+geom_point(aes(x = as.Date(time_out),
+y = amount)) +
+geom_point(aes(x = as.Date(time_back),
+y = amount)) +
+geom_text_repel(aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+scale_x_date(date_minor_breaks = "1 day") +
+labs(y = "Flight Price", x = "") +
+theme_minimal()
+plot_data %>%
+filter(amount <= 500) %>%
+ggplot() +
+geom_segment(aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+geom_point(aes(x = as.Date(time_out),
+y = amount)) +
+geom_point(aes(x = as.Date(time_back),
+y = amount)) +
+geom_text_repel(aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+geom_text_repel(aes(x = as.Date(time_back),
+y = amount,
+label = as.character(as.Date(time_back)))) +
+# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+scale_x_date(date_minor_breaks = "1 day") +
+labs(y = "Flight Price", x = "") +
+theme_minimal()
+plot_data %>%
+filter(amount <= 500) %>%
+ggplot() +
+geom_segment(aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+geom_point(aes(x = as.Date(time_out),
+y = amount)) +
+geom_point(aes(x = as.Date(time_back),
+y = amount)) +
+geom_text_repel(aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+scale_x_date(date_minor_breaks = "1 day") +
+labs(y = "Flight Price", x = "") +
+theme_minimal()
+df
+url_raw <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+url_glue <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut={dates}&Destination={dest}&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin={org}&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+from = "2019-01-01"
+from = "2019-01-01"
+to = "2019-11-01"
+as.Date(from)
+as.Date(from)
+as.Date(to)
+from = "2019-09-01"
+to = "2019-11-01"
+dates <- seq.Date(from = as.Date(from), to = as.Date(to), by = 6)
+dates
+parse_json_url <- function(url){
+data <- jsonlite::fromJSON(url)
+dates <- data$trips$dates[[1]]
+flight_info <- dates %>%
+tibble::as_tibble() %>%
+dplyr::mutate(n = purrr::map_int(flights, nrow)) %>%
+dplyr::filter(n > 0) %>%
+dplyr::select(-n) %>%
+dplyr::mutate(info = purrr::map(flights, function(x){
+faresLeft <- x$faresLeft
+fareClass <- x$regularFare$fareClass
+amount <- x$regularFare$fares[[1]]$amount
+time_up <- x$time[[1]][1]
+time_down <- x$time[[1]][2]
+tibble::tibble(faresLeft, fareClass, amount, time_up, time_down)
+})) %>%
+tidyr:::unnest(info) %>%
+dplyr::select(time_up, time_down, amount, faresLeft)
+return(flight_info)
+}
+library(tidyverse)
+library(lubridate)
+library(ggrepel)
+source("functions.R")
+source("functions.R")
+Sys.Date() + 30
+get_times <- function(org, dest, date_from = Sys.Date(), date_to = Sys.Date() + 28) {
+url_raw <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+url_glue <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut={dates}&Destination={destx}&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin={orgx}&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+dates <- seq.Date(from = as.Date(date_from), to = as.Date(date_to), by = 6)
+##
+m <- glue::glue("Making {length(dates) * 2} API calls to cover your date range")
+message(m)
+##
+orgx <- org
+destx <- dest
+urls <- glue::glue(url_glue)
+df_out <- purrr::map_dfr(urls, parse_json_url) %>% distinct()
+##
+m <- glue::glue("Done with outbound fligths")
+message(m)
+##
+orgx <- dest
+destx <- org
+urls <- glue::glue(url_glue)
+df_back <- purrr::map_dfr(urls, parse_json_url) %>%  distinct()
+##
+m <- glue::glue("Done with homebound fligths")
+message(m)
+##
+out <- df_out %>% dplyr::select(time_out = time_up, amount_out = amount)
+back <- df_back %>% dplyr::select(time_back = time_up, amount_back = amount)
+df <- tidyr::crossing(out, back) %>%
+dplyr::mutate(amount = amount_out + amount_back) %>%
+dplyr::select(time_out, time_back, amount) %>%
+dplyr::filter(time_out < time_back)
+##
+m <- glue::glue("Returning possible flight combinations and price")
+message(m)
+##
+return(df)
+}
+df <- get_times(org = "CPH", dest = "VIE")
+df
+plot_df <- function(max_days, min_days, max_amount){
+plot_data <- df %>%
+mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+total_days = as.numeric(total_time) / 24) %>%
+filter(total_days <= max_days,
+total_days >= min_days) %>%
+arrange(amount)
+plot_data %>%
+filter(amount <= max_amount) %>%
+ggplot() +
+geom_segment(aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+geom_point(aes(x = as.Date(time_out),
+y = amount)) +
+geom_point(aes(x = as.Date(time_back),
+y = amount)) +
+geom_text_repel(aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+scale_x_date(date_minor_breaks = "1 day") +
+labs(y = "Flight Price", x = "") +
+theme_minimal()
+}
+plot_df <- function(df, max_days, min_days, max_amount){
+plot_data <- df %>%
+mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+total_days = as.numeric(total_time) / 24) %>%
+filter(total_days <= max_days,
+total_days >= min_days) %>%
+arrange(amount)
+plot_data %>%
+filter(amount <= max_amount) %>%
+ggplot() +
+geom_segment(aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+geom_point(aes(x = as.Date(time_out),
+y = amount)) +
+geom_point(aes(x = as.Date(time_back),
+y = amount)) +
+geom_text_repel(aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+scale_x_date(date_minor_breaks = "1 day") +
+labs(y = "Flight Price", x = "") +
+theme_minimal()
+}
+plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+plot_df <- function(df, max_days, min_days, max_amount){
+plot_data <- df %>%
+dplyr::mutate(total_time = lubridate::ymd_hms(time_back) - lubridate::ymd_hms(time_out),
+total_days = as.numeric(total_time) / 24) %>%
+dplyr::filter(total_days <= max_days,
+total_days >= min_days,
+amount <= max_amount)
+ggplot2::ggplot(plot_data) +
+ggplot2::geom_segment(ggplot2::aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+ggplot2::geom_point(ggplot2::aes(x = as.Date(time_out),
+y = amount)) +
+ggplot2::geom_point(ggplot2::aes(x = as.Date(time_back),
+y = amount)) +
+ggrepel::geom_text_repel(ggplot2::aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+ggplot2::scale_x_date(date_minor_breaks = "1 day") +
+ggplot2::labs(y = "Flight Price", x = "") +
+ggplot2::theme_minimal()
+}
+plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+library(ggplot2)
+library(magrittr)
+df %>%
+mutate(w = time_out %>%
+lubridate::ymd_hms())
+df %>%
+mutate(w = time_out %>%
+lubridate::ymd_hms() %>%
+lubridate::week())
+df %>%
+mutate(w = time_out %>%
+lubridate::ymd_hms() %>%
+lubridate::isoweek())
+df %>%
+mutate(time_out = time_out %>%
+lubridate::ymd_hms(),
+time_back = time_back %>%
+lubridate::ymd_hms())
+df %>%
+mutate(time_out = time_out %>%
+lubridate::ymd_hms(),
+time_back = time_back %>%
+lubridate::ymd_hms(),
+d = lubridate::wday(label = T))
+df %>%
+mutate(time_out = time_out %>%
+lubridate::ymd_hms(),
+time_back = time_back %>%
+lubridate::ymd_hms(),
+d = lubridate::wday(time_out, label = T))
+df %>%
+mutate(time_out = time_out %>%
+lubridate::ymd_hms(),
+time_back = time_back %>%
+lubridate::ymd_hms(),
+d_out = lubridate::wday(time_out, label = T),
+d_back = lubridate::wday(time_back, label = T)
+)
+df %>%
+mutate(time_out = time_out %>%
+lubridate::ymd_hms(),
+time_back = time_back %>%
+lubridate::ymd_hms(),
+d_out = lubridate::wday(time_out, label = T, week_start = 1),
+d_back = lubridate::wday(time_back, label = T, week_start = 1)
+)
+df %>%
+mutate(time_out = time_out %>%
+lubridate::ymd_hms(),
+time_back = time_back %>%
+lubridate::ymd_hms(),
+d_out = lubridate::wday(time_out, label = T, week_start = 1),
+d_back = lubridate::wday(time_back, label = T, week_start = 1),
+w_out = lubridate::isoweek(time_out),
+w_back = lubridate::isoweek(time_back)
+)
+install.packages(c("sugrrants", "viridis"))
+library(tidyr)
+library(dplyr)
+library(viridis)
+library(sugrrants)
+pedestrian17 <- filter(pedestrian, Year == "2017")
+pedestrian17
+centre <- pedestrian17 %>%
+filter(Sensor_Name == "Melbourne Convention Exhibition Centre")
+centre_calendar <- centre %>%
+frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly")
+install.packages("tsibble")
+library(tsibble)
+centre_calendar <- centre %>%
+frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly")
+centre_calendar
+centre_calendar_wday <- centre %>%
+frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly",
+scale = "free_wday", ncol = 4)
+p3 <- ggplot(centre_calendar_wday,
+aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+geom_line()
+prettify(p3)
+p3
+prettify(p3)
+centre
+df1 <- df %>%
+mutate(id = 1:n())
+df1
+df1 <- df %>%
+mutate(id = 1:n()) %>%
+gather(type, time, -amount, -id)
+df1
+centre
+df2 <- df1 %>%
+frame_calendar(x = time, y = amount, date = as.Date(time), calendar = "monthly")
+df1
+df1 <- df %>%
+mutate(id = 1:n()) %>%
+gather(type, time, -amount, -id) %>%
+mutate(date = as_date(time))
+df1
+df2 <- df1 %>%
+frame_calendar(x = time, y = amount, date = date, calendar = "monthly")
+df2
+df2 <- df1 %>%
+frame_calendar(x = time, y = amount, date = date, calendar = "monthly",
+scale = "free_wday", ncol = 4)
+df2
+centre
+df2
+df2 <- df1 %>%
+frame_calendar(x = date, y = amount, date = date, calendar = "monthly",
+scale = "free_wday", ncol = 4)
+df2
+ggplot(df2,
+aes(x = .date, y = .amount, group = id)) +
+geom_line()
+ggplot(df2,
+aes(x = .date, y = .amount)) +
+geom_line()
+df1
+ggplot(df1, aes(x = time, y = amount)) +
+geom_line()
+ggplot(df1, aes(x = time, y = amount, group = id)) +
+geom_line()
+plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+p1 <- plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+p1
+max_days = 4
+min_days = 2
+max_amount = 500
+plot_data <- df %>%
+dplyr::mutate(total_time = lubridate::ymd_hms(time_back) - lubridate::ymd_hms(time_out),
+total_days = as.numeric(total_time) / 24) %>%
+dplyr::filter(total_days <= max_days,
+total_days >= min_days,
+amount <= max_amount)
+plot_data
+plot_data
+c(plot_data$time_out, plot_data$time_back)
+range(c(plot_data$time_out, plot_data$time_back))
+as_date(range(c(plot_data$time_out, plot_data$time_back)))
+date_range <- as_date(range(c(plot_data$time_out, plot_data$time_back)))
+seq.Date(date_range)
+seq.Date(date_range[1], date_range[2])
+seq.Date(date_range[1], date_range[2], by = "day")
+dates <- seq.Date(date_range[1], date_range[2], by = "day")
+tibble::tibble(dates)
+tibble::tibble(dates) %>%
+dplyr::mutate(w = lubridate::wday(dates))
+tibble::tibble(dates) %>%
+dplyr::mutate(w = lubridate::wday(dates, week_start = 1))
+tibble::tibble(dates) %>%
+dplyr::mutate(w = lubridate::wday(dates, week_start = 1),
+wend = w > 5)
+w_df <- tibble::tibble(dates) %>%
+dplyr::mutate(w = lubridate::wday(dates, week_start = 1),
+wend = w > 5)
+w_df %>%
+filter(wend)
+w_df <- tibble::tibble(dates) %>%
+dplyr::mutate(wd = lubridate::wday(dates, week_start = 1),
+wend = wd > 5,
+w = lubridate::isoweek(wd))
+tibble::tibble(dates) %>%
+dplyr::mutate(wd = lubridate::wday(dates, week_start = 1),
+wend = wd > 5)
+w_df <- tibble::tibble(dates) %>%
+dplyr::mutate(wd = lubridate::wday(dates, week_start = 1),
+wend = wd > 5,
+w = lubridate::isoweek(dates))
+w_df
+w_df %>%
+filter(wend)
+w_df %>%
+filter(wend) %>%
+spread(w, dates)
+w_df %>%
+filter(wend)
+w_df %>%
+filter(wend) %>%
+spread(w, dates)
+w_df %>%
+filter(wend) %>%
+spread(wd, dates)
+w_df %>%
+filter(wend) %>%
+spread(wd, dates) %>%
+select(sat = `6`, sun = `7`)
+w_df <- tibble::tibble(dates) %>%
+dplyr::mutate(wd = lubridate::wday(dates, week_start = 1),
+wend = wd > 5,
+w = lubridate::isoweek(dates)) %>%
+filter(wend) %>%
+spread(wd, dates) %>%
+select(sat = `6`, sun = `7`)
+w_df
+ggplot2::ggplot(plot_data) +
+ggplot2::geom_rect(data = w_df, aes(xmin = sat, xmax = sun, ymin = -Inf, ymax = Inf))
+ggplot2::ggplot(plot_data) +
+ggplot2::geom_rect(data = w_df, aes(xmin = sat, xmax = sun, ymin = -Inf, ymax = Inf)) +
+ggplot2::geom_segment(ggplot2::aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+ggplot2::geom_point(ggplot2::aes(x = as.Date(time_out),
+y = amount)) +
+ggplot2::geom_point(ggplot2::aes(x = as.Date(time_back),
+y = amount)) +
+ggrepel::geom_text_repel(ggplot2::aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+ggplot2::scale_x_date(date_minor_breaks = "1 day") +
+ggplot2::labs(y = "Flight Price", x = "") +
+ggplot2::theme_minimal()
+ggplot2::ggplot(plot_data) +
+ggplot2::geom_rect(data = w_df, aes(xmin = sat, xmax = sun, ymin = -Inf, ymax = Inf),
+fill = "lighblue") +
+ggplot2::geom_segment(ggplot2::aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+ggplot2::geom_point(ggplot2::aes(x = as.Date(time_out),
+y = amount)) +
+ggplot2::geom_point(ggplot2::aes(x = as.Date(time_back),
+y = amount)) +
+ggrepel::geom_text_repel(ggplot2::aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+ggplot2::scale_x_date(date_minor_breaks = "1 day") +
+ggplot2::labs(y = "Flight Price", x = "") +
+ggplot2::theme_minimal()
+ggplot2::ggplot(plot_data) +
+ggplot2::geom_rect(data = w_df, aes(xmin = sat, xmax = sun, ymin = -Inf, ymax = Inf),
+fill = "lightblue") +
+ggplot2::geom_segment(ggplot2::aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+ggplot2::geom_point(ggplot2::aes(x = as.Date(time_out),
+y = amount)) +
+ggplot2::geom_point(ggplot2::aes(x = as.Date(time_back),
+y = amount)) +
+ggrepel::geom_text_repel(ggplot2::aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+ggplot2::scale_x_date(date_minor_breaks = "1 day") +
+ggplot2::labs(y = "Flight Price", x = "") +
+ggplot2::theme_minimal()
+ggplot2::ggplot(plot_data) +
+ggplot2::geom_rect(data = w_df, aes(xmin = sat, xmax = sun, ymin = -Inf, ymax = Inf),
+fill = "lightblue", alpha = .5) +
+ggplot2::geom_segment(ggplot2::aes(x = as.Date(time_out),
+xend = as.Date(time_back),
+y = amount,
+yend = amount)) +
+ggplot2::geom_point(ggplot2::aes(x = as.Date(time_out),
+y = amount)) +
+ggplot2::geom_point(ggplot2::aes(x = as.Date(time_back),
+y = amount)) +
+ggrepel::geom_text_repel(ggplot2::aes(x = as.Date(time_out),
+y = amount,
+label = as.character(as.Date(time_out)))) +
+ggplot2::scale_x_date(date_minor_breaks = "1 day") +
+ggplot2::labs(y = "Flight Price", x = "") +
+ggplot2::theme_minimal()
+source("functions.R")
+library(magrittr)
+p1 <- plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+source('~/functions.R')
+p1 <- plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+source('~/functions.R')
+source('~/functions.R')
+p1 <- plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+p1

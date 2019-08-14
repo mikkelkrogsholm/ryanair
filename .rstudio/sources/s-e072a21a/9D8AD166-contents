@@ -1,0 +1,61 @@
+library(tidyverse)
+library(lubridate)
+source("functions.R")
+
+url_raw <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+url_glue <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut={dates}&Destination={dest}&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin={org}&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+
+##
+
+org <- "CPH"
+dest <- "VIE"
+date_out <- Sys.Date() %>% lubridate::ymd()
+dates <- seq.Date(from = date_out, by = 6, length.out = 10)
+urls <- glue::glue(url_glue)
+df_out <- map_dfr(urls, parse_json_url) %>%
+  distinct()
+
+###
+
+org <- "VIE" 
+dest <- "CPH"
+date_out <- Sys.Date() %>% lubridate::ymd()
+dates <- seq.Date(from = date_out, by = 6, length.out = 10)
+urls <- glue::glue(url_glue)
+df_back <- map_dfr(urls, parse_json_url) %>%
+  distinct()
+
+###
+
+out <- df_out %>%
+  select(time_out = time_up, amount_out = amount)
+
+back <- df_back %>%
+  select(time_back = time_up, amount_back = amount)
+
+df <- crossing(out, back) %>%
+  mutate(amount = amount_out + amount_back) %>%
+  select(time_out, time_back, amount) %>%
+  filter(time_out < time_back)
+
+###
+
+plot_data <- df %>%
+  mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+         total_days = as.numeric(total_time) / 24) %>%
+  filter(total_days < 4,
+         total_days > 1) %>%
+  arrange(amount)
+
+plot_data %>%
+  filter(amount <= 500) %>%
+  ggplot() + 
+  geom_segment(aes(x = as.Date(time_out), 
+                   xend = as.Date(time_back), 
+                   y = amount,
+                   yend = amount)) +
+  # scale_x_date(date_breaks = "1 week", date_labels = "%W") + 
+  scale_x_date(date_minor_breaks = "1 day") +
+  labs(y = "Flight Price", x = "") +
+  theme_minimal() 
+

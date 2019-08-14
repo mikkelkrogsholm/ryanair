@@ -1,0 +1,4 @@
+help/library/tidyr/html/expand.html,R: Expand data frame to include all combinations of values
+help/library/ggplot2/html/geom_segment.html,R: Line segments and curves
+help/library/lubridate/html/day.html,R: Get/set days component of a date-time
+help/library/ggplot2/html/geom_tile.html,R: Rectangles

@@ -1,0 +1,25 @@
+parse_json_url <- function(url){
+  
+  data <- jsonlite::fromJSON(url)
+  
+  dates <- data$trips$dates[[1]]
+  
+  flight_info <- dates %>%
+    as_tibble() %>%
+    mutate(n = map_int(flights, nrow)) %>%
+    filter(n > 0) %>%
+    select(-n) %>%
+    mutate(info = map(flights, function(x){
+      faresLeft <- x$faresLeft  
+      fareClass <- x$regularFare$fareClass
+      amount <- x$regularFare$fares[[1]]$amount
+      time_up <- x$time[[1]][1]
+      time_down <- x$time[[1]][2]
+      
+      tibble(faresLeft, fareClass, amount, time_up, time_down)
+    })) %>%
+    unnest(info) %>%
+    select(time_up, time_down, amount, faresLeft)
+  
+  return(flight_info)
+}

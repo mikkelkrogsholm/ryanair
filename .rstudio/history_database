@@ -1,0 +1,1031 @@
+1565720350219:url <- "https://services-api.ryanair.com/farfnd/3/oneWayFares?&departureAirportIataCode=BCN&language=en&limit=16&market=en-gb&offset=0&outboundDepartureDateFrom=2019-02-11&outboundDepartureDateTo=2019-10-28&priceValueTo=150"
+1565720360913:httr::parse_url(url)
+1565720592737:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateIn=2019-08-15&DateOut=2019-08-13&Destination=VIE&FlexDaysIn=6&FlexDaysOut=4&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=true&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565720594041:httr::parse_url(url)
+1565720896352:jsonlite::fromJSON(url)
+1565720903639:data <- jsonlite::fromJSON(url)
+1565721144841:data$trips
+1565721151851:data$trips$dates
+1565721171971:dates <- data$trips$dates
+1565721173931:View(dates)
+1565721191571:dates <- data$trips$dates[[1]]
+1565721193577:View(dates)
+1565721208045:View(dates[[2]][[1]])
+1565721213403:View(dates[[2]][[3]])
+1565721234300:data$trips$dates
+1565721238039:dates <- data$trips$dates
+1565721260086:dates_out <- data$trips$dates[[1]]
+1565721260315:dates_home <- data$trips$dates[[2]]
+1565721269755:View(dates_home)
+1565721293955:library(tidyverse)
+1565721297834:View(dates_out)
+1565721327956:dates_out$flights
+1565721330901:dates_out$flights[[1]]
+1565721336275:dates_out$flights[[2]]
+1565721338507:dates_out$flights[[3]]
+1565721347625:nrow(dates_out$flights[[3]])
+1565721355188:nrow(dates_out$flights[[1]])
+1565721370853:dates_out %>%
+1565721370878:mutate(n = n())
+1565721379953:dates_out %>%
+1565721379982:mutate(n = nrow)
+1565721406040:dates_out %>%
+1565721406092:mutate(n = flights %>% n())
+1565721417219:dates_out %>%
+1565721417249:mutate(n = nrow(flights))
+1565721434285:dates_out %>%
+1565721434310:as_tibble() %>%
+1565721434334:mutate(n = nrow(flights))
+1565721440498:dates_out %>%
+1565721440527:as_tibble()
+1565721464266:dates_out %>%
+1565721464291:as_tibble() %>%
+1565721464317:mutate(n = map_int(flights, nrow))
+1565721476275:dates_out %>%
+1565721476297:as_tibble() %>%
+1565721476321:mutate(n = map_int(flights, nrow)) %>%
+1565721476343:filter(n > 0)
+1565721493760:dates_out %>%
+1565721493790:as_tibble() %>%
+1565721493836:mutate(n = map_int(flights, nrow)) %>%
+1565721493863:filter(n > 0) %>%
+1565721493894:select(-n)
+1565721501680:dates_out %>%
+1565721501714:as_tibble() %>%
+1565721501748:mutate(n = map_int(flights, nrow)) %>%
+1565721501784:filter(n > 0) %>%
+1565721501819:select(-n) %>%
+1565721501840:unnest(flights)
+1565721514175:dates_out %>%
+1565721514209:as_tibble() %>%
+1565721514235:mutate(n = map_int(flights, nrow)) %>%
+1565721514271:filter(n > 0) %>%
+1565721514310:select(-n)
+1565721525066:y <- dates_out %>%
+1565721525096:as_tibble() %>%
+1565721525126:mutate(n = map_int(flights, nrow)) %>%
+1565721525155:filter(n > 0) %>%
+1565721525184:select(-n)
+1565721534962:x <- y$flights[[1]]
+1565721542256:x$faresLeft
+1565721549359:faresLeft <- x$faresLeft
+1565721565277:x$regularFare
+1565721588236:x$regularFare$fareClass
+1565721599611:x$regularFare$fares
+1565721623732:x$regularFare$fares[[1]]$amount
+1565721645423:dates_home
+1565721691072:faresLeft <- x$faresLeft
+1565721691118:fareClass <- x$regularFare$fareClass
+1565721691147:amount <- x$regularFare$fares[[1]]$amount
+1565721691192:tibble(faresLeft, fareClass, amount)
+1565721740443:dates_out
+1565721743732:dates_out %>%
+1565721743761:as_tibble() %>%
+1565721743787:mutate(n = map_int(flights, nrow)) %>%
+1565721743816:filter(n > 0) %>%
+1565721743842:select(-n)
+1565721760274:x$time
+1565721774613:x$time[[1]]
+1565721779138:x$time[[1]][1]
+1565721783874:x$time[[1]][2]
+1565721947632:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=4&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565721948721:data <- jsonlite::fromJSON(url)
+1565721957972:data$trips$dates
+1565721968888:dates_out <- data$trips$dates
+1565721977549:dates <- data$trips$dates[[1]]
+1565722001155:dates_out %>%
+1565722001310:as_tibble() %>%
+1565722001365:mutate(n = map_int(flights, nrow)) %>%
+1565722001437:filter(n > 0) %>%
+1565722001462:select(-n)
+1565722009874:dates %>%
+1565722009908:as_tibble()
+1565722016166:dates %>%
+1565722016210:as_tibble() %>%
+1565722016239:mutate(n = map_int(flights, nrow)) %>%
+1565722016267:filter(n > 0)
+1565722022442:dates %>%
+1565722022474:as_tibble() %>%
+1565722022504:mutate(n = map_int(flights, nrow)) %>%
+1565722022531:filter(n > 0) %>%
+1565722022557:select(-n)
+1565722028786:y <- dates %>%
+1565722028818:as_tibble() %>%
+1565722028848:mutate(n = map_int(flights, nrow)) %>%
+1565722028874:filter(n > 0) %>%
+1565722028906:select(-n)
+1565722040580:x <- y$flights[[1]]
+1565722042553:x
+1565722044848:x$faresLeft
+1565722051462:y$flights
+1565722063937:View(x)
+1565722079590:View(x[[6]][[1]])
+1565722101515:x
+1565722107632:faresLeft <- x$faresLeft
+1565722108106:fareClass <- x$regularFare$fareClass
+1565722109771:faresLeft
+1565722112170:fareClass
+1565722116567:x$regularFare$fares
+1565722124440:x$regularFare
+1565722148906:faresLeft <- x$faresLeft
+1565722148938:fareClass <- x$regularFare$fareClass
+1565722148967:amount <- x$regularFare$fares[[1]]$amount
+1565722149019:time_up <- x$time[[1]][1]
+1565722149046:time_down <- x$time[[1]][2]
+1565722158763:tibble(faresLeft, fareClass, amount, time_up, time_down)
+1565722203492:dates %>%
+1565722203546:as_tibble() %>%
+1565722203583:mutate(n = map_int(flights, nrow)) %>%
+1565722203622:filter(n > 0) %>%
+1565722203649:select(-n)
+1565722215747:y <- dates %>%
+1565722215777:as_tibble() %>%
+1565722215807:mutate(n = map_int(flights, nrow)) %>%
+1565722215837:filter(n > 0) %>%
+1565722215867:select(-n) %>%
+1565722215897:mutate(info = map(flights, function(x){
+1565722215924:faresLeft <- x$faresLeft
+1565722215953:fareClass <- x$regularFare$fareClass
+1565722215980:amount <- x$regularFare$fares[[1]]$amount
+1565722216012:time_up <- x$time[[1]][1]
+1565722216041:time_down <- x$time[[1]][2]
+1565722216102:tibble(faresLeft, fareClass, amount, time_up, time_down)
+1565722216118:}))
+1565722225247:y
+1565722241743:y %>%
+1565722241767:unnest(info)
+1565722302597:y <- dates %>%
+1565722302620:as_tibble() %>%
+1565722302644:mutate(n = map_int(flights, nrow)) %>%
+1565722302668:filter(n > 0) %>%
+1565722302694:select(-n) %>%
+1565722302719:mutate(info = map(flights, function(x){
+1565722302743:faresLeft <- x$faresLeft
+1565722302766:fareClass <- x$regularFare$fareClass
+1565722302788:amount <- x$regularFare$fares[[1]]$amount
+1565722302809:time_up <- x$time[[1]][1]
+1565722302832:time_down <- x$time[[1]][2]
+1565722302895:tibble(faresLeft, fareClass, amount, time_up, time_down)
+1565722302959:})) %>%
+1565722302982:unnest(info) %>%
+1565722303000:select(time_up, time_down, amount, faresLeft)
+1565722310506:flight_info <- dates %>%
+1565722310536:as_tibble() %>%
+1565722310564:mutate(n = map_int(flights, nrow)) %>%
+1565722310594:filter(n > 0) %>%
+1565722310623:select(-n) %>%
+1565722310655:mutate(info = map(flights, function(x){
+1565722310685:faresLeft <- x$faresLeft
+1565722310720:fareClass <- x$regularFare$fareClass
+1565722310746:amount <- x$regularFare$fares[[1]]$amount
+1565722310771:time_up <- x$time[[1]][1]
+1565722310797:time_down <- x$time[[1]][2]
+1565722310850:tibble(faresLeft, fareClass, amount, time_up, time_down)
+1565722310914:})) %>%
+1565722310941:unnest(info) %>%
+1565722310963:select(time_up, time_down, amount, faresLeft)
+1565722312722:flight_info
+1565722418328:library(tidyverse)
+1565722419012:source("functions.R")
+1565722427386:parse_json_url(url)
+1565722441495:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=4&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722442432:parse_json_url(url)
+1565722470109:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=14&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722472084:parse_json_url(url)
+1565722478476:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=4&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722479011:parse_json_url(url)
+1565722483293:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=5&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722483764:parse_json_url(url)
+1565722487140:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722488960:parse_json_url(url)
+1565722493157:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=7&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722493416:parse_json_url(url)
+1565722496921:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722500970:parse_json_url(url)
+1565722533354:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Origin=CPH&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722534058:parse_json_url(url)
+1565722563640:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Origin=CPH&Destination=VIE&RoundTrip=false&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false"
+1565722564309:parse_json_url(url)
+1565722567253:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Origin=CPH&Destination=VIE&RoundTrip=false&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722567800:parse_json_url(url)
+1565722577082:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722577482:parse_json_url(url)
+1565722580174:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722581208:parse_json_url(url)
+1565722631939:org <- "CPH"
+1565722631978:dest <- "VIE"
+1565722632026:dates <- "2019-08-27"
+1565722641123:date_out <- "2019-08-27"
+1565722721106:lubridate::ymd(date_out)
+1565722734239:date_out <- "2019-08-27" %>% lubridate::ymd()
+1565722763758:seq.Date(from = date_out, by = 6, length.out = 10)
+1565722773024:date_out <- Sys.Date() %>% lubridate::ymd()
+1565722773817:seq.Date(from = date_out, by = 6, length.out = 10)
+1565722781568:date_out <- Sys.Date() %>% lubridate::ymd()
+1565722782183:seq.Date(from = date_out, by = 6, length.out = 10)
+1565722802243:dates <- seq.Date(from = date_out, by = 6, length.out = 10)
+1565722863691:url_raw <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722913718:url <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut={dates}&Destination={dest}&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin={org}&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722925420:url_glue <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut={dates}&Destination={dest}&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin={org}&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565722928761:glue::glue(url_glue)
+1565722934134:urls <- glue::glue(url_glue)
+1565722955234:df <- map_dfr(urls, parse_json_url)
+1565722964919:df
+1565723026701:df_out <- df
+1565723069465:org <- "VIE"
+1565723069520:dest <- "CPH"
+1565723069559:date_out <- Sys.Date() %>% lubridate::ymd()
+1565723069588:dates <- seq.Date(from = date_out, by = 6, length.out = 10)
+1565723069627:urls <- glue::glue(url_glue)
+1565723069682:df_back <- map_dfr(urls, parse_json_url)
+1565723082242:df_back
+1565723110573:org <- "CPH"
+1565723110597:dest <- "VIE"
+1565723110618:date_out <- Sys.Date() %>% lubridate::ymd()
+1565723110642:dates <- seq.Date(from = date_out, by = 6, length.out = 10)
+1565723110668:urls <- glue::glue(url_glue)
+1565723110695:df_out <- map_dfr(urls, parse_json_url) %>%
+1565723110717:distinct()
+1565723119551:###
+1565723119586:org <- "VIE"
+1565723119607:dest <- "CPH"
+1565723119628:date_out <- Sys.Date() %>% lubridate::ymd()
+1565723119648:dates <- seq.Date(from = date_out, by = 6, length.out = 10)
+1565723119668:urls <- glue::glue(url_glue)
+1565723119687:df_back <- map_dfr(urls, parse_json_url) %>%
+1565723119704:distinct()
+1565723130479:df_back
+1565723205464:# Generate all combinations with expand():
+1565723205492:formulas <- list(
+1565723205520:formula1 = Sepal.Length ~ Sepal.Width,
+1565723205547:formula2 = Sepal.Length ~ Sepal.Width + Petal.Width,
+1565723205573:formula3 = Sepal.Length ~ Sepal.Width + Petal.Width + Petal.Length
+1565723205604:)
+1565723208120:formulas
+1565723210582:data <- split(iris, iris$Species)
+1565723211630:data
+1565723214844:crossing(formula = formulas, data)
+1565723229576:df_out
+1565723257679:df_out %>%
+1565723257698:select(time_out = time_up, amount_out = mount)
+1565723260999:df_out %>%
+1565723261045:select(time_out = time_up, amount_out = amount)
+1565723270855:out <- df_out %>%
+1565723270883:select(time_out = time_up, amount_out = amount)
+1565723297145:back <- df_back %>%
+1565723297172:select(time_back = time_up, amount_back = amount)
+1565723298920:back
+1565723316141:crossing(out, back)
+1565723339078:34*34
+1565723389560:crossing(out, back) %>%
+1565723389584:mutate(amount = amount_out + amount_back)
+1565723410113:crossing(out, back) %>%
+1565723410142:mutate(amount = amount_out + amount_back) %>%
+1565723410177:select(time_out, time_back, amount)
+1565723440394:crossing(out, back) %>%
+1565723440423:mutate(amount = amount_out + amount_back) %>%
+1565723440449:select(time_out, time_back, amount) %>%
+1565723440473:filter(time_out < time_back)
+1565723448443:df <- crossing(out, back) %>%
+1565723448477:mutate(amount = amount_out + amount_back) %>%
+1565723448502:select(time_out, time_back, amount) %>%
+1565723448524:filter(time_out < time_back)
+1565723530298:df %>%
+1565723530324:mutate(total_time = time_back - time_out)
+1565723545231:library(lubridate)
+1565723552473:df
+1565723573164:df %>%
+1565723573193:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out))
+1565723640111:df %>%
+1565723640133:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723640163:total_days = days(total_time))
+1565723643291:df %>%
+1565723643323:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723643350:total_days = day(total_time))
+1565723647130:df %>%
+1565723647172:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723647202:total_days = days(total_time))
+1565723679843:df %>%
+1565723679874:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723679906:total_days = total_time / 24)
+1565723695681:df %>%
+1565723695717:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723695752:total_days = as.numeric(total_time))
+1565723706818:df %>%
+1565723706845:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723706874:total_days = as.numeric(total_time))
+1565723718497:df %>%
+1565723718527:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723718555:total_days = as.numeric(total_time) / 24)
+1565723739143:df %>%
+1565723739180:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723739225:total_days = as.numeric(total_time) / 24) %>%
+1565723739257:filter(total_days < 4)
+1565723759168:df %>%
+1565723759198:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723759225:total_days = as.numeric(total_time) / 24) %>%
+1565723759252:filter(total_days < 4,
+1565723759283:total_days > 1)
+1565723764682:df %>%
+1565723764707:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723764730:total_days = as.numeric(total_time) / 24) %>%
+1565723764762:filter(total_days < 4,
+1565723764789:total_days > 2)
+1565723780491:df %>%
+1565723780562:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723780589:total_days = as.numeric(total_time) / 24) %>%
+1565723780616:filter(total_days < 4,
+1565723780643:total_days > 1)
+1565723808604:df %>%
+1565723808647:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723808686:total_days = as.numeric(total_time) / 24) %>%
+1565723808712:filter(total_days < 4,
+1565723808739:total_days > 1) %>%
+1565723808765:arrange(amount)
+1565723837185:plot_data <- df %>%
+1565723837221:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565723837266:total_days = as.numeric(total_time) / 24) %>%
+1565723837341:filter(total_days < 4,
+1565723837363:total_days > 1) %>%
+1565723837384:arrange(amount)
+1565724004709:ggplot(plot_data) +
+1565724004760:geom_segment(aes(x = time_out,
+1565724004802:xend = time_back,
+1565724004837:y = amount,
+1565724004862:yend = amount))
+1565724052090:ggplot(plot_data) +
+1565724052160:geom_segment(aes(x = time_out,
+1565724052184:xend = time_back,
+1565724052208:y = amount,
+1565724052236:yend = amount)) %>%
+1565724052259:coord_flip()
+1565724058723:ggplot(plot_data) +
+1565724058748:geom_segment(aes(x = time_out,
+1565724058777:xend = time_back,
+1565724058805:y = amount,
+1565724058830:yend = amount))
+1565724088667:ggplot(plot_data) +
+1565724088707:geom_segment(aes(x = time_out,
+1565724088754:xend = time_back,
+1565724088788:y = amount,
+1565724088820:yend = amount)) +
+1565724088906:theme_minimal()
+1565724188856:ggplot(plot_data) +
+1565724188889:geom_segment(aes(x = time_out,
+1565724188916:xend = time_back,
+1565724188938:y = amount,
+1565724188988:yend = amount)) +
+1565724189013:scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565724189040:theme_minimal()
+1565724196939:time_out
+1565724218263:ggplot(plot_data) +
+1565724218290:geom_segment(aes(x = as.Date(time_out),
+1565724218317:xend = as.Date(time_back),
+1565724218341:y = amount,
+1565724218364:yend = amount)) +
+1565724218389:#scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565724218412:theme_minimal()
+1565724229903:ggplot(plot_data) +
+1565724229957:geom_segment(aes(x = as.Date(time_out),
+1565724229994:xend = as.Date(time_back),
+1565724230021:y = amount,
+1565724230047:yend = amount)) +
+1565724230071:scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565724230095:theme_minimal()
+1565724274624:ggplot(plot_data) +
+1565724274665:geom_segment(aes(x = as.Date(time_out),
+1565724274709:xend = as.Date(time_back),
+1565724274741:y = amount,
+1565724274774:yend = amount)) +
+1565724274983:#scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565724275007:scale_x_date(date_minor_breaks = "1 day") +
+1565724275034:theme_minimal()
+1565724304984:ggplot(plot_data) +
+1565724305037:geom_segment(aes(x = as.Date(time_out),
+1565724305076:xend = as.Date(time_back),
+1565724305163:y = amount,
+1565724305192:yend = amount)) +
+1565724305218:#scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565724305249:scale_x_date(date_minor_breaks = "1 day",
+1565724305271:date_major_breaks = "7 day") +
+1565724305295:theme_minimal()
+1565724388828:ggplot(plot_data) +
+1565724388859:geom_segment(aes(x = as.Date(time_out),
+1565724388885:xend = as.Date(time_back),
+1565724388908:y = amount,
+1565724388929:yend = amount)) +
+1565724388952:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565724388977:# scale_x_date(date_minor_breaks = "1 day") +
+1565724388997:theme_minimal()
+1565724406163:ggplot(plot_data) +
+1565724406185:geom_segment(aes(x = as.Date(time_out),
+1565724406208:xend = as.Date(time_back),
+1565724406233:y = amount,
+1565724406257:yend = amount)) +
+1565724406280:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565724406307:scale_x_date(date_minor_breaks = "1 day") +
+1565724406333:theme_minimal()
+1565724454303:plot_data %>%
+1565724454353:filter(amount <= 500) %>%
+1565724454381:ggplot() +
+1565724454407:geom_segment(aes(x = as.Date(time_out),
+1565724454434:xend = as.Date(time_back),
+1565724454461:y = amount,
+1565724454489:yend = amount)) +
+1565724454516:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565724454542:scale_x_date(date_minor_breaks = "1 day") +
+1565724454566:theme_minimal()
+1565724481610:plot_data %>%
+1565724481638:filter(amount <= 500) %>%
+1565724481670:ggplot() +
+1565724481699:geom_segment(aes(x = as.Date(time_out),
+1565724481726:xend = as.Date(time_back),
+1565724481755:y = amount,
+1565724481786:yend = amount)) +
+1565724481811:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565724481838:scale_x_date(date_minor_breaks = "1 day") +
+1565724481872:labs(y = "Flight Price", x = "")
+1565724486219:plot_data %>%
+1565724486245:filter(amount <= 500) %>%
+1565724486280:ggplot() +
+1565724486324:geom_segment(aes(x = as.Date(time_out),
+1565724486352:xend = as.Date(time_back),
+1565724486376:y = amount,
+1565724486409:yend = amount)) +
+1565724486438:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565724486466:scale_x_date(date_minor_breaks = "1 day") +
+1565724486491:labs(y = "Flight Price", x = "") +
+1565724486514:theme_minimal()
+1565725648686:plot_data %>%
+1565725648728:filter(amount <= 500) %>%
+1565725648763:ggplot() +
+1565725648800:geom_segment(aes(x = as.Date(time_out),
+1565725648830:xend = as.Date(time_back),
+1565725648860:y = amount,
+1565725648885:yend = amount)) +
+1565725648913:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565725648941:scale_x_date(date_minor_breaks = "1 day") +
+1565725648967:labs(y = "Flight Price", x = "") +
+1565725648995:theme_minimal()
+1565725698743:install.packages("ggrepel")
+1565725721281:library(ggrepel)
+1565725815044:plot_data %>%
+1565725815078:filter(amount <= 500) %>%
+1565725815112:ggplot() +
+1565725815140:geom_segment(aes(x = as.Date(time_out),
+1565725815168:xend = as.Date(time_back),
+1565725815194:y = amount,
+1565725815225:yend = amount)) +
+1565725815252:geom_text_repel(aes(x = as.Date(time_out),
+1565725815279:y = amount,
+1565725815302:label = as.Date(time_out))) +
+1565725815329:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565725815353:scale_x_date(date_minor_breaks = "1 day") +
+1565725815375:labs(y = "Flight Price", x = "") +
+1565725815404:theme_minimal()
+1565725826931:plot_data %>%
+1565725826959:filter(amount <= 500) %>%
+1565725826984:ggplot() +
+1565725827010:geom_segment(aes(x = as.Date(time_out),
+1565725827033:xend = as.Date(time_back),
+1565725827059:y = amount,
+1565725827085:yend = amount)) +
+1565725827110:geom_text_repel(aes(x = as.Date(time_out),
+1565725827138:y = amount,
+1565725827164:label = as.character(as.Date(time_out)))) +
+1565725827191:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565725827220:scale_x_date(date_minor_breaks = "1 day") +
+1565725827246:labs(y = "Flight Price", x = "") +
+1565725827273:theme_minimal()
+1565725878188:plot_data %>%
+1565725878226:filter(amount <= 500) %>%
+1565725878266:ggplot() +
+1565725878302:geom_segment(aes(x = as.Date(time_out),
+1565725878333:xend = as.Date(time_back),
+1565725878356:y = amount,
+1565725878378:yend = amount),
+1565725878402:lineend = "round") +
+1565725878423:geom_text_repel(aes(x = as.Date(time_out),
+1565725878447:y = amount,
+1565725878470:label = as.character(as.Date(time_out)))) +
+1565725878495:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565725878520:scale_x_date(date_minor_breaks = "1 day") +
+1565725878544:labs(y = "Flight Price", x = "") +
+1565725878567:theme_minimal()
+1565725948456:plot_data %>%
+1565725948497:filter(amount <= 500) %>%
+1565725948534:ggplot() +
+1565725948565:geom_segment(aes(x = as.Date(time_out),
+1565725948595:xend = as.Date(time_back),
+1565725948624:y = amount,
+1565725948651:yend = amount)) +
+1565725948678:geom_point(aes(x = as.Date(time_out),
+1565725948706:y = amount)) +
+1565725948733:geom_text_repel(aes(x = as.Date(time_out),
+1565725948759:y = amount,
+1565725948789:label = as.character(as.Date(time_out)))) +
+1565725948812:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565725948833:scale_x_date(date_minor_breaks = "1 day") +
+1565725948859:labs(y = "Flight Price", x = "") +
+1565725948882:theme_minimal()
+1565725960669:plot_data %>%
+1565725960700:filter(amount <= 500) %>%
+1565725960732:ggplot() +
+1565725960757:geom_segment(aes(x = as.Date(time_out),
+1565725960781:xend = as.Date(time_back),
+1565725960807:y = amount,
+1565725960830:yend = amount)) +
+1565725960855:geom_point(aes(x = as.Date(time_out),
+1565725960879:y = amount)) +
+1565725960903:geom_point(aes(x = as.Date(time_back),
+1565725960932:y = amount)) +
+1565725960959:geom_text_repel(aes(x = as.Date(time_out),
+1565725960985:y = amount,
+1565725961011:label = as.character(as.Date(time_out)))) +
+1565725961049:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565725961103:scale_x_date(date_minor_breaks = "1 day") +
+1565725961140:labs(y = "Flight Price", x = "") +
+1565725961212:theme_minimal()
+1565725985631:plot_data %>%
+1565725985665:filter(amount <= 500) %>%
+1565725985691:ggplot() +
+1565725985718:geom_segment(aes(x = as.Date(time_out),
+1565725985745:xend = as.Date(time_back),
+1565725985775:y = amount,
+1565725985797:yend = amount)) +
+1565725985821:geom_point(aes(x = as.Date(time_out),
+1565725985846:y = amount)) +
+1565725985875:geom_point(aes(x = as.Date(time_back),
+1565725985910:y = amount)) +
+1565725985988:geom_text_repel(aes(x = as.Date(time_out),
+1565725986023:y = amount,
+1565725986061:label = as.character(as.Date(time_out)))) +
+1565725986082:geom_text_repel(aes(x = as.Date(time_back),
+1565725986119:y = amount,
+1565725986186:label = as.character(as.Date(time_back)))) +
+1565725986211:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565725986234:scale_x_date(date_minor_breaks = "1 day") +
+1565725986257:labs(y = "Flight Price", x = "") +
+1565725986331:theme_minimal()
+1565726002592:plot_data %>%
+1565726002618:filter(amount <= 500) %>%
+1565726002643:ggplot() +
+1565726002664:geom_segment(aes(x = as.Date(time_out),
+1565726002690:xend = as.Date(time_back),
+1565726002719:y = amount,
+1565726002747:yend = amount)) +
+1565726002776:geom_point(aes(x = as.Date(time_out),
+1565726002805:y = amount)) +
+1565726002833:geom_point(aes(x = as.Date(time_back),
+1565726002860:y = amount)) +
+1565726002887:geom_text_repel(aes(x = as.Date(time_out),
+1565726002914:y = amount,
+1565726002941:label = as.character(as.Date(time_out)))) +
+1565726002970:# scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+1565726003023:scale_x_date(date_minor_breaks = "1 day") +
+1565726003063:labs(y = "Flight Price", x = "") +
+1565726003092:theme_minimal()
+1565727423156:df
+1565727544730:url_raw <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565727545793:url_glue <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut={dates}&Destination={dest}&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin={org}&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565727566326:from = "2019-01-01"
+1565727591261:from = "2019-01-01"
+1565727591292:to = "2019-11-01"
+1565727614215:as.Date(from)
+1565727622846:as.Date(from)
+1565727623117:as.Date(to)
+1565727631212:from = "2019-09-01"
+1565727631504:to = "2019-11-01"
+1565727647327:dates <- seq.Date(from = as.Date(from), to = as.Date(to), by = 6)
+1565727649400:dates
+1565727704508:parse_json_url <- function(url){
+1565727704560:data <- jsonlite::fromJSON(url)
+1565727704606:dates <- data$trips$dates[[1]]
+1565727704641:flight_info <- dates %>%
+1565727704664:tibble::as_tibble() %>%
+1565727704685:dplyr::mutate(n = purrr::map_int(flights, nrow)) %>%
+1565727704708:dplyr::filter(n > 0) %>%
+1565727704730:dplyr::select(-n) %>%
+1565727704750:dplyr::mutate(info = purrr::map(flights, function(x){
+1565727704772:faresLeft <- x$faresLeft
+1565727704797:fareClass <- x$regularFare$fareClass
+1565727704818:amount <- x$regularFare$fares[[1]]$amount
+1565727704841:time_up <- x$time[[1]][1]
+1565727704861:time_down <- x$time[[1]][2]
+1565727704891:tibble::tibble(faresLeft, fareClass, amount, time_up, time_down)
+1565727704917:})) %>%
+1565727704935:tidyr:::unnest(info) %>%
+1565727704966:dplyr::select(time_up, time_down, amount, faresLeft)
+1565727704992:return(flight_info)
+1565727705012:}
+1565728126198:library(tidyverse)
+1565728126228:library(lubridate)
+1565728126258:library(ggrepel)
+1565728126289:source("functions.R")
+1565728192496:source("functions.R")
+1565728215155:Sys.Date() + 30
+1565728230281:get_times <- function(org, dest, date_from = Sys.Date(), date_to = Sys.Date() + 28) {
+1565728230328:url_raw <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565728230355:url_glue <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut={dates}&Destination={destx}&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin={orgx}&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565728230399:dates <- seq.Date(from = as.Date(date_from), to = as.Date(date_to), by = 6)
+1565728230441:##
+1565728230470:m <- glue::glue("Making {length(dates) * 2} API calls to cover your date range")
+1565728230517:message(m)
+1565728230579:##
+1565728230640:orgx <- org
+1565728230661:destx <- dest
+1565728230693:urls <- glue::glue(url_glue)
+1565728230710:df_out <- purrr::map_dfr(urls, parse_json_url) %>% distinct()
+1565728230745:##
+1565728230766:m <- glue::glue("Done with outbound fligths")
+1565728230790:message(m)
+1565728230810:##
+1565728230850:orgx <- dest
+1565728230874:destx <- org
+1565728230955:urls <- glue::glue(url_glue)
+1565728230983:df_back <- purrr::map_dfr(urls, parse_json_url) %>%  distinct()
+1565728231026:##
+1565728231052:m <- glue::glue("Done with homebound fligths")
+1565728231076:message(m)
+1565728231104:##
+1565728231150:out <- df_out %>% dplyr::select(time_out = time_up, amount_out = amount)
+1565728231201:back <- df_back %>% dplyr::select(time_back = time_up, amount_back = amount)
+1565728231310:df <- tidyr::crossing(out, back) %>%
+1565728231372:dplyr::mutate(amount = amount_out + amount_back) %>%
+1565728231400:dplyr::select(time_out, time_back, amount) %>%
+1565728231427:dplyr::filter(time_out < time_back)
+1565728231498:##
+1565728231527:m <- glue::glue("Returning possible flight combinations and price")
+1565728231570:message(m)
+1565728231595:##
+1565728231639:return(df)
+1565728231670:}
+1565728248633:df <- get_times(org = "CPH", dest = "VIE")
+1565728255934:df
+1565728352041:plot_df <- function(max_days, min_days, max_amount){
+1565728352088:plot_data <- df %>%
+1565728352118:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565728352147:total_days = as.numeric(total_time) / 24) %>%
+1565728352170:filter(total_days <= max_days,
+1565728352192:total_days >= min_days) %>%
+1565728352215:arrange(amount)
+1565728352250:plot_data %>%
+1565728352276:filter(amount <= max_amount) %>%
+1565728352303:ggplot() +
+1565728352335:geom_segment(aes(x = as.Date(time_out),
+1565728352359:xend = as.Date(time_back),
+1565728352393:y = amount,
+1565728352412:yend = amount)) +
+1565728352435:geom_point(aes(x = as.Date(time_out),
+1565728352455:y = amount)) +
+1565728352477:geom_point(aes(x = as.Date(time_back),
+1565728352497:y = amount)) +
+1565728352522:geom_text_repel(aes(x = as.Date(time_out),
+1565728352543:y = amount,
+1565728352564:label = as.character(as.Date(time_out)))) +
+1565728352589:scale_x_date(date_minor_breaks = "1 day") +
+1565728352621:labs(y = "Flight Price", x = "") +
+1565728352656:theme_minimal()
+1565728352687:}
+1565728360003:plot_df <- function(df, max_days, min_days, max_amount){
+1565728360040:plot_data <- df %>%
+1565728360065:mutate(total_time = ymd_hms(time_back) - ymd_hms(time_out),
+1565728360091:total_days = as.numeric(total_time) / 24) %>%
+1565728360117:filter(total_days <= max_days,
+1565728360140:total_days >= min_days) %>%
+1565728360164:arrange(amount)
+1565728360206:plot_data %>%
+1565728360230:filter(amount <= max_amount) %>%
+1565728360255:ggplot() +
+1565728360276:geom_segment(aes(x = as.Date(time_out),
+1565728360290:xend = as.Date(time_back),
+1565728360309:y = amount,
+1565728360328:yend = amount)) +
+1565728360351:geom_point(aes(x = as.Date(time_out),
+1565728360371:y = amount)) +
+1565728360392:geom_point(aes(x = as.Date(time_back),
+1565728360412:y = amount)) +
+1565728360435:geom_text_repel(aes(x = as.Date(time_out),
+1565728360458:y = amount,
+1565728360481:label = as.character(as.Date(time_out)))) +
+1565728360505:scale_x_date(date_minor_breaks = "1 day") +
+1565728360532:labs(y = "Flight Price", x = "") +
+1565728360552:theme_minimal()
+1565728360582:}
+1565728386707:plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+1565728536132:plot_df <- function(df, max_days, min_days, max_amount){
+1565728536189:plot_data <- df %>%
+1565728536223:dplyr::mutate(total_time = lubridate::ymd_hms(time_back) - lubridate::ymd_hms(time_out),
+1565728536256:total_days = as.numeric(total_time) / 24) %>%
+1565728536287:dplyr::filter(total_days <= max_days,
+1565728536318:total_days >= min_days,
+1565728536337:amount <= max_amount)
+1565728536381:ggplot2::ggplot(plot_data) +
+1565728536413:ggplot2::geom_segment(ggplot2::aes(x = as.Date(time_out),
+1565728536438:xend = as.Date(time_back),
+1565728536459:y = amount,
+1565728536481:yend = amount)) +
+1565728536505:ggplot2::geom_point(ggplot2::aes(x = as.Date(time_out),
+1565728536528:y = amount)) +
+1565728536549:ggplot2::geom_point(ggplot2::aes(x = as.Date(time_back),
+1565728536576:y = amount)) +
+1565728536600:ggrepel::geom_text_repel(ggplot2::aes(x = as.Date(time_out),
+1565728536623:y = amount,
+1565728536649:label = as.character(as.Date(time_out)))) +
+1565728536673:ggplot2::scale_x_date(date_minor_breaks = "1 day") +
+1565728536694:ggplot2::labs(y = "Flight Price", x = "") +
+1565728536718:ggplot2::theme_minimal()
+1565728536756:}
+1565728543025:plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+1565762573613:library(ggplot2)
+1565762588227:library(magrittr)
+1565762665311:df %>%
+1565762665337:mutate(w = time_out %>%
+1565762665379:lubridate::ymd_hms())
+1565762675538:df %>%
+1565762675564:mutate(w = time_out %>%
+1565762675589:lubridate::ymd_hms() %>%
+1565762675614:lubridate::week())
+1565762681085:df %>%
+1565762681119:mutate(w = time_out %>%
+1565762681151:lubridate::ymd_hms() %>%
+1565762681180:lubridate::isoweek())
+1565762719744:df %>%
+1565762719770:mutate(time_out = time_out %>%
+1565762719795:lubridate::ymd_hms(),
+1565762719817:time_back = time_back %>%
+1565762719840:lubridate::ymd_hms())
+1565762738605:df %>%
+1565762738628:mutate(time_out = time_out %>%
+1565762738650:lubridate::ymd_hms(),
+1565762738674:time_back = time_back %>%
+1565762738698:lubridate::ymd_hms(),
+1565762738717:d = lubridate::wday(label = T))
+1565762745562:df %>%
+1565762745594:mutate(time_out = time_out %>%
+1565762745624:lubridate::ymd_hms(),
+1565762745651:time_back = time_back %>%
+1565762745680:lubridate::ymd_hms(),
+1565762745709:d = lubridate::wday(time_out, label = T))
+1565762766366:df %>%
+1565762766391:mutate(time_out = time_out %>%
+1565762766415:lubridate::ymd_hms(),
+1565762766439:time_back = time_back %>%
+1565762766463:lubridate::ymd_hms(),
+1565762766486:d_out = lubridate::wday(time_out, label = T),
+1565762766511:d_back = lubridate::wday(time_back, label = T)
+1565762766535:)
+1565762795047:df %>%
+1565762795077:mutate(time_out = time_out %>%
+1565762795103:lubridate::ymd_hms(),
+1565762795131:time_back = time_back %>%
+1565762795160:lubridate::ymd_hms(),
+1565762795189:d_out = lubridate::wday(time_out, label = T, week_start = 1),
+1565762795217:d_back = lubridate::wday(time_back, label = T, week_start = 1)
+1565762795245:)
+1565762824166:df %>%
+1565762824192:mutate(time_out = time_out %>%
+1565762824218:lubridate::ymd_hms(),
+1565762824245:time_back = time_back %>%
+1565762824269:lubridate::ymd_hms(),
+1565762824295:d_out = lubridate::wday(time_out, label = T, week_start = 1),
+1565762824322:d_back = lubridate::wday(time_back, label = T, week_start = 1),
+1565762824348:w_out = lubridate::isoweek(time_out),
+1565762824533:w_back = lubridate::isoweek(time_back)
+1565762824582:)
+1565763175519:install.packages(c("sugrrants", "viridis"))
+1565763212024:library(tidyr)
+1565763213096:library(dplyr)
+1565763213411:library(viridis)
+1565763214487:library(sugrrants)
+1565763215474:pedestrian17 <- filter(pedestrian, Year == "2017")
+1565763216011:pedestrian17
+1565763233731:centre <- pedestrian17 %>%
+1565763233756:filter(Sensor_Name == "Melbourne Convention Exhibition Centre")
+1565763245091:centre_calendar <- centre %>%
+1565763245135:frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly")
+1565763255192:install.packages("tsibble")
+1565763304998:library(tsibble)
+1565763308022:centre_calendar <- centre %>%
+1565763308049:frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly")
+1565763309463:centre_calendar
+1565763373048:centre_calendar_wday <- centre %>%
+1565763373076:frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly",
+1565763373103:scale = "free_wday", ncol = 4)
+1565763373187:p3 <- ggplot(centre_calendar_wday,
+1565763373233:aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+1565763373276:geom_line()
+1565763373334:prettify(p3)
+1565763379071:p3
+1565763383390:prettify(p3)
+1565763415888:centre
+1565763459829:df1 <- df %>%
+1565763459857:mutate(id = 1:n())
+1565763462190:df1
+1565763552128:df1 <- df %>%
+1565763552154:mutate(id = 1:n()) %>%
+1565763552180:gather(type, time, -amount, -id)
+1565763553689:df1
+1565763594052:centre
+1565763616894:df2 <- df1 %>%
+1565763616926:frame_calendar(x = time, y = amount, date = as.Date(time), calendar = "monthly")
+1565763630251:df1
+1565763651175:df1 <- df %>%
+1565763651201:mutate(id = 1:n()) %>%
+1565763651227:gather(type, time, -amount, -id) %>%
+1565763651252:mutate(date = as_date(time))
+1565763653422:df1
+1565763658566:df2 <- df1 %>%
+1565763658593:frame_calendar(x = time, y = amount, date = date, calendar = "monthly")
+1565763667483:df2
+1565763704835:df2 <- df1 %>%
+1565763704865:frame_calendar(x = time, y = amount, date = date, calendar = "monthly",
+1565763704894:scale = "free_wday", ncol = 4)
+1565763707349:df2
+1565763720993:centre
+1565763768848:df2
+1565763791419:df2 <- df1 %>%
+1565763791449:frame_calendar(x = date, y = amount, date = date, calendar = "monthly",
+1565763791485:scale = "free_wday", ncol = 4)
+1565763793605:df2
+1565763834793:ggplot(df2,
+1565763834820:aes(x = .date, y = .amount, group = id)) +
+1565763834844:geom_line()
+1565763840046:ggplot(df2,
+1565763840098:aes(x = .date, y = .amount)) +
+1565763840137:geom_line()
+1565763855963:df1
+1565763885289:ggplot(df1, aes(x = time, y = amount)) +
+1565763885318:geom_line()
+1565763899581:ggplot(df1, aes(x = time, y = amount, group = id)) +
+1565763899610:geom_line()
+1565763978338:plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+1565764017889:p1 <- plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+1565764020242:p1
+1565764050540:max_days = 4
+1565764053308:min_days = 2
+1565764056019:max_amount = 500
+1565764058530:plot_data <- df %>%
+1565764058562:dplyr::mutate(total_time = lubridate::ymd_hms(time_back) - lubridate::ymd_hms(time_out),
+1565764058608:total_days = as.numeric(total_time) / 24) %>%
+1565764058644:dplyr::filter(total_days <= max_days,
+1565764058674:total_days >= min_days,
+1565764058702:amount <= max_amount)
+1565764060028:plot_data
+1565764065672:plot_data
+1565764095351:c(plot_data$time_out, plot_data$time_back)
+1565764100874:range(c(plot_data$time_out, plot_data$time_back))
+1565764116650:as_date(range(c(plot_data$time_out, plot_data$time_back)))
+1565764122084:date_range <- as_date(range(c(plot_data$time_out, plot_data$time_back)))
+1565764131875:seq.Date(date_range)
+1565764138558:seq.Date(date_range[1], date_range[2])
+1565764146362:seq.Date(date_range[1], date_range[2], by = "day")
+1565764157517:dates <- seq.Date(date_range[1], date_range[2], by = "day")
+1565764169638:tibble::tibble(dates)
+1565764193368:tibble::tibble(dates) %>%
+1565764193402:dplyr::mutate(w = lubridate::wday(dates))
+1565764207819:tibble::tibble(dates) %>%
+1565764207854:dplyr::mutate(w = lubridate::wday(dates, week_start = 1))
+1565764222498:tibble::tibble(dates) %>%
+1565764222522:dplyr::mutate(w = lubridate::wday(dates, week_start = 1),
+1565764222546:wend = w > 5)
+1565764259451:w_df <- tibble::tibble(dates) %>%
+1565764259479:dplyr::mutate(w = lubridate::wday(dates, week_start = 1),
+1565764259506:wend = w > 5)
+1565764296660:w_df %>%
+1565764296689:filter(wend)
+1565764347458:w_df <- tibble::tibble(dates) %>%
+1565764347485:dplyr::mutate(wd = lubridate::wday(dates, week_start = 1),
+1565764347510:wend = wd > 5,
+1565764347545:w = lubridate::isoweek(wd))
+1565764359305:tibble::tibble(dates) %>%
+1565764359334:dplyr::mutate(wd = lubridate::wday(dates, week_start = 1),
+1565764359364:wend = wd > 5)
+1565764368679:w_df <- tibble::tibble(dates) %>%
+1565764368712:dplyr::mutate(wd = lubridate::wday(dates, week_start = 1),
+1565764368742:wend = wd > 5,
+1565764368775:w = lubridate::isoweek(dates))
+1565764370838:w_df
+1565764378137:w_df %>%
+1565764378166:filter(wend)
+1565764401341:w_df %>%
+1565764401372:filter(wend) %>%
+1565764401405:spread(w, dates)
+1565764412083:w_df %>%
+1565764412133:filter(wend)
+1565764421084:w_df %>%
+1565764421119:filter(wend) %>%
+1565764421158:spread(w, dates)
+1565764435213:w_df %>%
+1565764435238:filter(wend) %>%
+1565764435268:spread(wd, dates)
+1565764475128:w_df %>%
+1565764475155:filter(wend) %>%
+1565764475180:spread(wd, dates) %>%
+1565764475204:select(sat = `6`, sun = `7`)
+1565764482893:w_df <- tibble::tibble(dates) %>%
+1565764482924:dplyr::mutate(wd = lubridate::wday(dates, week_start = 1),
+1565764482956:wend = wd > 5,
+1565764483005:w = lubridate::isoweek(dates)) %>%
+1565764483049:filter(wend) %>%
+1565764483088:spread(wd, dates) %>%
+1565764483146:select(sat = `6`, sun = `7`)
+1565764484693:w_df
+1565764543346:ggplot2::ggplot(plot_data) +
+1565764543393:ggplot2::geom_rect(data = w_df, aes(xmin = sat, xmax = sun, ymin = -Inf, ymax = Inf))
+1565764570077:ggplot2::ggplot(plot_data) +
+1565764570119:ggplot2::geom_rect(data = w_df, aes(xmin = sat, xmax = sun, ymin = -Inf, ymax = Inf)) +
+1565764570146:ggplot2::geom_segment(ggplot2::aes(x = as.Date(time_out),
+1565764570174:xend = as.Date(time_back),
+1565764570206:y = amount,
+1565764570232:yend = amount)) +
+1565764570262:ggplot2::geom_point(ggplot2::aes(x = as.Date(time_out),
+1565764570297:y = amount)) +
+1565764570323:ggplot2::geom_point(ggplot2::aes(x = as.Date(time_back),
+1565764570345:y = amount)) +
+1565764570368:ggrepel::geom_text_repel(ggplot2::aes(x = as.Date(time_out),
+1565764570390:y = amount,
+1565764570411:label = as.character(as.Date(time_out)))) +
+1565764570431:ggplot2::scale_x_date(date_minor_breaks = "1 day") +
+1565764570450:ggplot2::labs(y = "Flight Price", x = "") +
+1565764570471:ggplot2::theme_minimal()
+1565764594126:ggplot2::ggplot(plot_data) +
+1565764594155:ggplot2::geom_rect(data = w_df, aes(xmin = sat, xmax = sun, ymin = -Inf, ymax = Inf),
+1565764594185:fill = "lighblue") +
+1565764594212:ggplot2::geom_segment(ggplot2::aes(x = as.Date(time_out),
+1565764594237:xend = as.Date(time_back),
+1565764594260:y = amount,
+1565764594283:yend = amount)) +
+1565764594307:ggplot2::geom_point(ggplot2::aes(x = as.Date(time_out),
+1565764594330:y = amount)) +
+1565764594354:ggplot2::geom_point(ggplot2::aes(x = as.Date(time_back),
+1565764594377:y = amount)) +
+1565764594401:ggrepel::geom_text_repel(ggplot2::aes(x = as.Date(time_out),
+1565764594757:y = amount,
+1565764594791:label = as.character(as.Date(time_out)))) +
+1565764594951:ggplot2::scale_x_date(date_minor_breaks = "1 day") +
+1565764594974:ggplot2::labs(y = "Flight Price", x = "") +
+1565764594997:ggplot2::theme_minimal()
+1565764601503:ggplot2::ggplot(plot_data) +
+1565764601533:ggplot2::geom_rect(data = w_df, aes(xmin = sat, xmax = sun, ymin = -Inf, ymax = Inf),
+1565764601564:fill = "lightblue") +
+1565764601590:ggplot2::geom_segment(ggplot2::aes(x = as.Date(time_out),
+1565764601616:xend = as.Date(time_back),
+1565764601646:y = amount,
+1565764601670:yend = amount)) +
+1565764601695:ggplot2::geom_point(ggplot2::aes(x = as.Date(time_out),
+1565764601722:y = amount)) +
+1565764601750:ggplot2::geom_point(ggplot2::aes(x = as.Date(time_back),
+1565764601780:y = amount)) +
+1565764601804:ggrepel::geom_text_repel(ggplot2::aes(x = as.Date(time_out),
+1565764601829:y = amount,
+1565764601854:label = as.character(as.Date(time_out)))) +
+1565764601877:ggplot2::scale_x_date(date_minor_breaks = "1 day") +
+1565764601900:ggplot2::labs(y = "Flight Price", x = "") +
+1565764601921:ggplot2::theme_minimal()
+1565764610925:ggplot2::ggplot(plot_data) +
+1565764610957:ggplot2::geom_rect(data = w_df, aes(xmin = sat, xmax = sun, ymin = -Inf, ymax = Inf),
+1565764610990:fill = "lightblue", alpha = .5) +
+1565764611016:ggplot2::geom_segment(ggplot2::aes(x = as.Date(time_out),
+1565764611040:xend = as.Date(time_back),
+1565764611064:y = amount,
+1565764611091:yend = amount)) +
+1565764611119:ggplot2::geom_point(ggplot2::aes(x = as.Date(time_out),
+1565764611142:y = amount)) +
+1565764611176:ggplot2::geom_point(ggplot2::aes(x = as.Date(time_back),
+1565764611264:y = amount)) +
+1565764611285:ggrepel::geom_text_repel(ggplot2::aes(x = as.Date(time_out),
+1565764611307:y = amount,
+1565764611327:label = as.character(as.Date(time_out)))) +
+1565764611372:ggplot2::scale_x_date(date_minor_breaks = "1 day") +
+1565764611395:ggplot2::labs(y = "Flight Price", x = "") +
+1565764611490:ggplot2::theme_minimal()
+1565764685078:source("functions.R")
+1565764686509:library(magrittr)
+1565764688048:p1 <- plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+1565764703384:source('~/functions.R')
+1565764706535:p1 <- plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+1565764735877:source('~/functions.R')
+1565764746672:source('~/functions.R')
+1565764749431:p1 <- plot_df(df, max_days = 4, min_days = 2, max_amount = 500)
+1565764749837:p1
+1565775503200:date_from = Sys.Date(), date_to = Sys.Date() + 365
+1565775510281:org =  "CPH"
+1565775510313:dest = "PRG"
+1565775510342:date_from = Sys.Date()
+1565775510371:date_to = Sys.Date() + 365
+1565775514620:url_raw <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565775514990:url_glue <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut={dates}&Destination={destx}&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin={orgx}&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+1565775515939:dates <- seq.Date(from = as.Date(date_from), to = as.Date(date_to), by = 6)
+1565775517324:dates
+1565775525756:##
+1565775525784:m <- glue::glue("Making {length(dates)} API calls to cover your date range")
+1565775527554:message(m)
+1565775543563:orgx <- org
+1565775543588:destx <- dest
+1565775543628:urls <- glue::glue(url_glue)
+1565775543657:df_out <- purrr::map_dfr(urls, parse_json_url) %>% distinct()
+1565775612893:df_out <- purrr::map_dfr(urls, parse_json_url) %>% dplyr::distinct()
+1565775619627:urls <- glue::glue(url_glue)
+1565775619657:df_out <- purrr::map_dfr(urls, parse_json_url) %>% dplyr::distinct()
+1565775627257:urls

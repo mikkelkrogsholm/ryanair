@@ -1,0 +1,36 @@
+library(tidyr)
+library(dplyr)
+library(viridis)
+library(sugrrants)
+library(tsibble)
+pedestrian17 <- filter(pedestrian, Year == "2017")
+pedestrian17
+
+
+centre <- pedestrian17 %>% 
+  filter(Sensor_Name == "Melbourne Convention Exhibition Centre")
+centre_calendar <- centre %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly")
+centre_calendar
+
+
+centre_calendar_wday <- centre %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, calendar = "monthly",
+                 scale = "free_wday", ncol = 4)
+p3 <- ggplot(centre_calendar_wday, 
+             aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+  geom_line()
+
+prettify(p3)
+
+df1 <- df %>%
+  mutate(id = 1:n()) %>%
+  gather(type, time, -amount, -id) %>%
+  mutate(date = as_date(time))
+
+df2 <- df1 %>%
+  frame_calendar(x = date, y = amount, date = date, calendar = "monthly",
+                 scale = "free_wday", ncol = 4)
+
+ggplot(df1, aes(x = time, y = amount, group = id)) +
+  geom_line()

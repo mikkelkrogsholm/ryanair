@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+
+  rstudio:
+    image: rocker/tidyverse:3.6.0
+    container_name: ryan_studio
+    volumes:
+      - ./:/home/mikkel
+    environment:
+      USER: mikkel
+      PASSWORD: mikkel
+    ports:
+      - 9999:8787

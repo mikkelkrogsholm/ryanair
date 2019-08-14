@@ -1,0 +1,22 @@
+
+org =  "CPH"
+dest = "PRG"
+date_from = Sys.Date()
+date_to = Sys.Date() + 365
+
+
+url_raw <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut=2019-08-27&Destination=VIE&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin=CPH&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+url_glue <- "https://desktopapps.ryanair.com/v4/da-dk/availability?ADT=1&CHD=0&DateOut={dates}&Destination={destx}&FlexDaysOut=6&INF=0&IncludeConnectingFlights=true&Origin={orgx}&RoundTrip=false&TEEN=0&ToUs=AGREED&exists=false&promoCode="
+
+dates <- seq.Date(from = as.Date(date_from), to = as.Date(date_to), by = 6)
+
+##
+m <- glue::glue("Making {length(dates)} API calls to cover your date range")
+message(m)
+##
+
+orgx <- org
+destx <- dest
+
+urls <- glue::glue(url_glue)
+df_out <- purrr::map_dfr(urls, parse_json_url) %>% dplyr::distinct()
